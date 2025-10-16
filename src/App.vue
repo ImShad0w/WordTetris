@@ -1,11 +1,19 @@
 <template>
-  <MainMenu v-if="!startGame" @startGame="startGame = true" />
-  <GameEngine v-else-if="startGame" />
+  <GameEngine v-if="startGame" />
+  <MainMenu v-else @gameStart="handleGameStart" />
 </template>
 <script setup>
 import { ref } from "vue";
+const startGame = ref(false);
 import GameEngine from "./components/GameEngine.vue";
 import MainMenu from "./components/MainMenu.vue";
-const startGame = ref(false);
+function handleGameStart() {
+  startGame.value = true;
+}
 </script>
-<style scoped></style>
+<style>
+body {
+  background-color: #323437;
+  font-size: sans-serif;
+}
+</style>
