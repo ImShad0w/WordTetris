@@ -16,7 +16,7 @@
         </span>
       </div>
       <ul class="word-list">
-        <li v-for="(word, i) in visibleWords" :key="i">
+        <li v-for="(word, i) in visibleWordsReversed" :key="i">
           {{ word.text }}
         </li>
       </ul>
@@ -45,11 +45,18 @@ const activeWord = computed(() => {
   return gameState.value.words[gameState.value.activeWordIndex];
 });
 
-const visibleWords = computed(() => {
-  return gameState.value.words.filter(
-    (word) => word.text !== activeWord.value.text && !word.completed,
-  );
+const visibleWordsReversed = computed(() => {
+  return gameState.value.words
+    .filter((word) => word.text !== activeWord.value.text && !word.completed)
+    .slice() // make a shallow copy
+    .reverse(); // reverse the order
 });
+
+//const visibleWords = computed(() => {
+//  return gameState.value.words.filter(
+//    (word) => word.text !== activeWord.value.text && !word.completed,
+//  );
+//});
 
 let wordStartTime = 0;
 
@@ -120,6 +127,7 @@ function handleKeyDown(event) {
   } else if (event.key.length === 1) {
     gameState.value.inputText += event.key;
     handleWordInput();
+    return event.key;
   }
 }
 
@@ -134,15 +142,11 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-body {
-  background-color: #323437;
-}
-
 .container {
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 35vh;
+  margin-top: 45vh;
   position: relative;
   font-family: sans-serif;
 }
@@ -152,7 +156,7 @@ body {
   color: #616467;
   list-style: none;
   width: 225px;
-  top: 40px;
+  bottom: 5vh;
 }
 
 .word-list > li {
@@ -171,6 +175,7 @@ body {
 
 .input-word {
   width: 225px;
+  height: 75px;
   font-size: 3em;
   padding: 10px 35px;
   z-index: 2;
