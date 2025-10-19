@@ -26,6 +26,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 
+const emit = defineEmits(["activeKey"]);
 const gameState = ref({
   words: [
     { id: 1, text: "component", completed: false },
@@ -127,7 +128,7 @@ function handleKeyDown(event) {
   } else if (event.key.length === 1) {
     gameState.value.inputText += event.key;
     handleWordInput();
-    return event.key;
+    emit("activeKey", event.key);
   }
 }
 
